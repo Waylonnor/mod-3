@@ -1,30 +1,34 @@
-
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract CustomToken is ERC20, Ownable {
-    constructor(
-        string memory _tokenName,
-        string memory _tokenSymbol,
-        uint256 initialSupply,
-        address initialOwner
-    ) ERC20(_tokenName, _tokenSymbol) Ownable(initialOwner) {
-        _mint(msg.sender, initialSupply);
+contract Token is ERC20 {
+    address public owner;
+    bool public isEnabled;
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Access denied: Only the owner can call this function");
+        _;
     }
 
-    function mintTokens(address recipientParty, uint256 totalSum) external onlyOwner {
-        _mint(recipientParty, totalSum);
+    constructor() ERC20("Token", "TK") {
+        owner = msg.sender;
+        _mint(owner, 500);
+        isEnabled = true;
     }
 
-    function burnTokens(uint256 totalSum) external {
-        _burn(msg.sender, totalSum);
+    function mintTokens(address endPoint, uint256 mass) external onlyOwner {
+        _mint(endPoint, mass);
     }
 
-    function transferTokens(address recipientParty, uint256 totalSum) external returns (bool) {
-        _transfer(msg.sender, recipientParty, totalSum);
-        return true;
+    function burnTokens(uint256 massToBurn) external {
+        require(balanceOf(msg.sender) >= massToBurn, "Burn failed: Insufficient balance");
+        _burn(msg.sender, massToBurn);
+    }
+
+    function transferTokens(address endPoint, uint256 massToSend) external {
+        require(balanceOf(msg.sender) >= massToSend, "Transfer failed: Insufficient balance");
+        _transfer(msg.sender, endPoint, massToSend);
     }
 }
