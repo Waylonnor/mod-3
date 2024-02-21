@@ -34,13 +34,6 @@ This Solidity smart contract implements a basic ERC20 token named "Token" with t
 
 3. **Ownership Transfer:** Ownership transfer functionality is not explicitly implemented in this contract. However, it can be added by extending the contract to include a function allowing the current owner to transfer ownership to another address.
 
-**Security Considerations:**
-
-1. Ensure that the contract owner's private key is securely stored, as it holds the authority to mint tokens, which can affect the token's economy.
-
-2. Exercise caution while interacting with the contract's functions, especially those that involve transferring ownership or burning tokens, as these actions are irreversible.
-
-3. Audit the contract thoroughly and consider additional security measures if deploying it for production use.
 
 **License:**
 
